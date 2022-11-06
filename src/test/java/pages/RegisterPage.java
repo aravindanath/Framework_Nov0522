@@ -44,8 +44,30 @@ public class RegisterPage extends BasePage{
     @FindBy(css = ".btn.btn-primary")
     WebElement continueButton;
 
+    @FindBy(xpath="//h1")
+    WebElement successMsg;
+
 
     // Business Logic
 
 
+    public void navigateToRegistrationPage(){
+        myAccountButton.click();
+        registerButton.click();
+    }
+
+    public void registerNewUser(String firstName, String lastName, String email, String telephone, String password, String confirmPassword){
+        firstNameTextField.sendKeys(firstName);
+        lastNameTextField.sendKeys(lastName);
+        emailTextField.sendKeys(email);
+        telephoneTextField.sendKeys(telephone);
+        passwordTextField.sendKeys(password);
+        confirmPasswordTextField.sendKeys(confirmPassword);
+        agreeCb.click();
+        continueButton.click();
+    }
+
+    public void verifySucessfulRegistration(){
+        BasePage.verifyTitle(successMsg,"Your Account Has Been Created!");
+    }
 }

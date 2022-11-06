@@ -9,10 +9,13 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Properties;
 
 public class BasePage {
 
@@ -109,25 +112,29 @@ public class BasePage {
 
     public static String email(){
         Faker faker = new Faker(new Locale("en-IND"));
-        String fn = faker.name().firstName();
-        return fn+"@gmail.com";
+        String fn = faker.name().firstName()+"@gmail.com";
+        System.out.println("Email: " + fn);
+        return fn;
     }
 
     public static String firstName(){
         Faker faker = new Faker(new Locale("en-IND"));
         String fn = faker.name().firstName();
+        System.out.println("First name: " + fn);
         return fn;
     }
 
     public static String lastName(){
         Faker faker = new Faker(new Locale("en-IND"));
         String ln = faker.name().lastName();
+        System.out.println("Last name: " + ln);
         return ln;
     }
 
     public static String mobileNumber(){
         Faker faker = new Faker(new Locale("en-IND"));
         String ln = faker.number().digits(10);
+        System.out.println("Mobile Number: " + ln);
         return ln;
     }
 
@@ -138,5 +145,30 @@ public class BasePage {
                 .replace("/","_")
                 .replace(" ","_").replace(":","_");
         return dt;
+    }
+
+
+    public static  String getvalue(String key){
+        String path =  System.getProperty("user.dir")+File.separator+"config.properties";
+        String value = null;
+        try {
+            FileInputStream fis = new FileInputStream(path);
+            Properties props = new Properties();
+            props.load(fis);
+            value = props.getProperty(key);
+
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return value;
+    }
+
+
+    public  static void verifyTitle(WebElement element, String  text){
+        String actual = element.getText();
+        System.out.println("Actual Text: " + actual);
+        Assert.assertEquals(actual, text);
     }
 }
